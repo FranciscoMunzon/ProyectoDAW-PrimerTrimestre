@@ -17,7 +17,7 @@ SHOW WARNINGS;
 USE `Tiendadb` ;
 
 -- -----------------------------------------------------
--- Table `tienda`.`roles`
+-- Table `Tiendadb`.`categorias`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `Tiendadb`.`categorias` ;
 
@@ -118,7 +118,7 @@ CREATE UNIQUE INDEX `name_UNIQUE` ON `Tiendadb`.`productos` (`product_name` ASC)
 SHOW WARNINGS;
 
 -- -----------------------------------------------------
--- Table `Tiendadb`.`users_haswatched_films`
+-- Table `Tiendadb`.`users_bought_productos`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `Tiendadb`.`users_bought_productos` ;
 
@@ -130,6 +130,7 @@ CREATE TABLE IF NOT EXISTS `Tiendadb`.`users_bought_productos` (
   CONSTRAINT `fk_Users_has_bought_productos_productos1`
     FOREIGN KEY (`productos_producto_id`)
     REFERENCES `Tiendadb`.`productos` (`producto_id`),
+    ON DELETE CASCADE,
   CONSTRAINT `fk_Users_has_productos_Users1`
     FOREIGN KEY (`Users_user_id`)
     REFERENCES `Tiendadb`.`users` (`user_id`))

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Producto.Service.ProductoService;
+import com.example.Producto.controller.converter.Converter;
+import com.example.Producto.controller.dto.ProductDto;
 import com.example.Producto.persistance.model.Product;
 
 import lombok.AllArgsConstructor;
@@ -25,31 +27,34 @@ import lombok.AllArgsConstructor;
 public class ProductController {
 
     ProductoService productoService;
+
+    Converter converter;
     
     @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
-        ResponseEntity<List<Product>> response = 
-        ResponseEntity.ok(productoService.getAllProducts());  
+    public ResponseEntity<List<ProductDto>> getAllProducts() {
+        ResponseEntity<List<ProductDto>> response = 
+        ResponseEntity.ok().body(productoService.getAllProducts().stream().map(converter::toProductDto).toList());  
         return response;
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductsById(@PathVariable Long id) {
-        ResponseEntity<Product> response = ResponseEntity.ok(productoService.getProductsById(id));
+    public ResponseEntity<ProductDto> getProductsById(@PathVariable Long id) {
+        ResponseEntity<ProductDto> response = ResponseEntity.ok(converter.toProductDto(productoService.getProductsById(id)));
         return response;
     }
     
     @PostMapping("")
-    public ResponseEntity<Product> saveProduct(@RequestBody Product product) {
-       ResponseEntity<Product> response = ResponseEntity.ok(productoService.addProduct(product));   
-
-        return response;
+    public ResponseEntity<ProductDto> saveProduct(@RequestBody ProductDto productDto) {
+         Product product = converter.toProductEntity(productDto);
+        Product saved = productoService.addProduct(product); 
+        return ResponseEntity.ok(converter.toProductDto(saved));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> editProduct( @RequestBody Product product, @PathVariable Long id) {
-        ResponseEntity<Product> response = ResponseEntity.ok(productoService.editProduct(product,id)); 
-        return response;
+    public ResponseEntity<ProductDto> editProduct( @RequestBody ProductDto productDto, @PathVariable Long id) {
+        Product product = converter.toProductEntity(productDto);
+        Product edited = productoService.editProduct(product,id);
+        return ResponseEntity.ok(converter.toProductDto(edited));
     }
 
      @DeleteMapping("/{id}")

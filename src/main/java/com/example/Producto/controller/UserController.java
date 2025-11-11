@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Producto.Service.UserService;
+import com.example.Producto.controller.converter.Converter;
+import com.example.Producto.controller.dto.UserDto;
 import com.example.Producto.persistance.model.User;
 
 import lombok.AllArgsConstructor;
@@ -20,10 +22,17 @@ import lombok.AllArgsConstructor;
 public class UserController {
 
     UserService userService;    
+
+    Converter converter ;
     
     @GetMapping("/")
-    public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.ok().body(userService.getAllUser());
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        ResponseEntity<List<UserDto>> response = ResponseEntity.ok().body( 
+            userService.getAllUser()
+                    .stream()              
+                    .map(converter::toUserDto)
+                    .toList()); 
+        return response;
     }
 
 }

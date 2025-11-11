@@ -40,11 +40,11 @@ public class ProductoServiceImpl implements ProductoService  {
         productoEditado.setDescription(product.getDescription());   
         productoEditado.setPrice(product.getPrice()); 
         productoEditado.setImageUrl(product.getImageUrl());
-        return productoRepository.save(product);
+        return productoRepository.save(productoEditado);
     }
 
     @Override
-    public void deleteProduct( Long id) {
+    public void deleteProduct(Long id) {
          productoRepository.deleteById(id);       
     }
 

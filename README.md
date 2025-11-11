@@ -28,6 +28,8 @@ src/
  └── main/
      ├── java/com/example/Producto/
      │    ├── controller/      → Controladores REST
+     │    ├── controller/converter/  → Entity to DTO 
+     │    ├── controller/dto/  →  DTO 
      │    ├── service/         → Interfaces y lógica de negocio
      │    ├── service/impl/    → Implementaciones de servicios
      │    ├── persistance/
