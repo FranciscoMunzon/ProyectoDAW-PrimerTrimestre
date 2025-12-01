@@ -1,5 +1,7 @@
 package com.example.Proyectos.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.Proyectos.persistance.model.Technologies;
@@ -12,11 +14,21 @@ import lombok.RequiredArgsConstructor;
 public class TechnologiesController {
 
     private final TechnologiesService techService;
+    
+    @GetMapping
+    public ResponseEntity<List<Technologies>> getAll() {
+        return ResponseEntity.ok(techService.findAll());
+    }
 
     @PostMapping
     public ResponseEntity<Technologies> createTechnology(@RequestBody Technologies tech) {
         Technologies created = techService.createTechnology(tech);
         return ResponseEntity.status(201).body(created);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Technologies> update(@PathVariable Integer id, @RequestBody Technologies tech) {
+        return ResponseEntity.ok(techService.update(id, tech));
     }
 
     @DeleteMapping("/{id}")

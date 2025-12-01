@@ -1,5 +1,7 @@
 package com.example.Proyectos.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.Proyectos.persistance.model.Developers;
@@ -13,10 +15,20 @@ public class DevelopersController {
 
     private final DevelopersService developersService;
 
+    @GetMapping
+    public ResponseEntity<List<Developers>> getAll() {
+        return ResponseEntity.ok(developersService.findAll());
+    }
+
     @PostMapping
     public ResponseEntity<Developers> createDeveloper(@RequestBody Developers dev) {
         Developers created = developersService.createDeveloper(dev);
         return ResponseEntity.status(201).body(created);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Developers> update(@PathVariable Integer id, @RequestBody Developers dev) {
+        return ResponseEntity.ok(developersService.update(id, dev));
     }
 
     @DeleteMapping("/{id}")

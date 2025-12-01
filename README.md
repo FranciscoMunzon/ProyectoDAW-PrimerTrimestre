@@ -1,254 +1,220 @@
-# 🧩 Spring Boot API - Ejemplo MVC 
+# 📘 API REST – Gestión de Proyectos
+Proyecto de la asignatura — Optativa
 
-Este proyecto es una API REST desarrollada con **Spring Boot**, diseñada como ejemplo educativo y práctico para comprender la **arquitectura MVC**, la **capa de persistencia (JPA/Hibernate)** y el consumo de datos mediante **servicios y controladores REST**.
+Este proyecto consiste en el desarrollo de una API REST completa para la gestión de proyectos, desarrolladores, tecnologías y estados.
 
-Incluye ejemplos de relaciones entre entidades (`@OneToOne`, `@ManyToOne`, `@ManyToMany`), DTOs, servicios y controladores.
+El servidor sigue el patrón:
+
+Controlador → Servicio → Repositorio → Base de Datos
+
+
+Asimismo, implementa todas las funcionalidades exigidas por el enunciado del trabajo, incluyendo documentación, arquitectura clara y endpoints totalmente funcionales.
+
+--- 
+
+## 📁 Estructura del Proyecto
+```
+src/
+ └── main/
+     ├── java/
+     │   └── com/example/Proyectos/
+     │        ├── controller/
+     │        ├── service/
+     │        │     └── impl/
+     │        ├── persistence/
+     │        │     ├── model/
+     │        │     └── repository/
+     │        ├── converter/
+     │        └── dto/
+     └── resources/
+         └── application.properties
+```
 
 ---
 
-## 🚀 Tecnologías utilizadas
+## 🗄️ Modelo de Base de Datos
 
-- **Java 17+**
-- **Spring Boot 3.x**
-- **Spring Web**
-- **Spring Data JPA / Hibernate**
+La base de datos contiene las siguientes entidades:
+
+- **projects**
+
+- **developers**
+
+- **technologies**
+
+- **status**
+
+Tablas intermedias ManyToMany:
+
+- *developers_worked_on_projects*
+
+- *technologies_used_in_projects*
+
+---
+
+## 📊 Diagrama de relaciones
+```
+Project 1 --- n Status
+Project n --- n Developers
+Project n --- n Technologies
+```
+---
+
+## 🚀 Tecnologías principales utilizadas
+
+- **Java**
+
+- **Spring Boot**
+
 - **MySQL**
-- **Lombok**
-- **Jackson (para serialización JSON)**
+
 - **Maven**
 
 ---
 
-## 🧱 Arquitectura del Proyecto
-
-El proyecto sigue el patrón **MVC (Model - View - Controller)**, con separación clara entre capas:
-
+## 🌐 URL Base de la API
 ```
-src/
- └── main/
-     ├── java/com/example/Producto/
-     │    ├── controller/      → Controladores REST
-     │    ├── controller/converter/  → Entity to DTO 
-     │    ├── controller/dto/  →  DTO 
-     │    ├── service/         → Interfaces y lógica de negocio
-     │    ├── service/impl/    → Implementaciones de servicios
-     │    ├── persistance/
-     │    │    ├── model/      → Entidades JPA
-     │    │    └── repository/ → Repositorios JPA
-     │    └── ProductoApplication.java
-     └── resources/
-          ├── application.properties
-          └── data.sql / schema.sql (opcional)
+/api/v1
 ```
 
----
+## 📌 Endpoints implementados (OBLIGATORIOS)
 
-## 📦 Entidades Principales
+A continuación se describen todos los endpoints que la API soporta.
 
-### 🧍‍♂️ `User`
+## 🧩 1. PROJECTS
+### ✔ GET — Obtener todos los proyectos
 
-```java
-@Table(name = "users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id", nullable = false, unique = true)
-    Long userId;
+Incluye: estado + tecnologías + desarrolladores
 
-    @Column(name = "username", nullable = false, unique = true, length = 20)
-    String username;
-  
-    @Column(name = "password", nullable = false)
-    String password;
+GET /api/v1/projects
 
-    @Column(name = "email", nullable = false, unique = true, length = 90)
-    String email;
-
-
-    @OneToOne(mappedBy = "owner", fetch = FetchType.LAZY)
-    Dni documentDni;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name="users_bought_productos", 
-               joinColumns={@JoinColumn(name="Users_user_id", referencedColumnName = "user_id")}, 
-               inverseJoinColumns={@JoinColumn(name="productos_producto_id", referencedColumnName = "producto_id")})
-    List<Product> products;
-}
-```
-
----
-
-### 🪪 `Dni`
-
-```java
-@Entity
-@Table(name = "dni")
-public class Dni {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "dni_id", nullable = false, unique = true)
-    Integer dniId;
-
-    @Column(name = "number", nullable = false, unique = true, length = 9)
-    String number;
-
-    @Column(name = "front_img")
-    String frontImg;
-
-    @Column(name = "back_img")
-    String backImg;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="Users_user_id", referencedColumnName = "user_id")
-    @JsonIgnore
-    User owner;
-}
-```
-
----
-
-### 🛒 `Product`
-
-```java
-@Entity
-@Table(name = "productos")
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "producto_id")    
-    private  Long id;  
-    @Column (name = "product_name" ) 
-    private String name;
-    @Column (name = "description" ) 
-    private String description;
-    @Column (name = "price" ) 
-    private Double price;
-    @Column (name = "image_url") 
-    private String imageUrl;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "category_id", referencedColumnName = "category_id")
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    Category category; 
-    @ManyToMany(mappedBy="products", fetch = FetchType.LAZY)
-    @JsonIgnore
-    List<User> usersWhobought;
-}
-```
-
----
-
-### 🏷️ `Category`
-
-```java
-@Entity
-@Table(name = "categorias")
-public class Category {
-    @Id
-    @Column (name = "category_id")
-    private Long categoryId;
-
-    @Column (name = "category_name")
-    private String categoryName;    
-    
-     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
-     @JsonIgnore
-    private List<Product> products;
-}
-```
-
----
-
-## 🔗 Relaciones entre Entidades
-
-| Entidad | Relación | Tipo | Descripción |
-|----------|-----------|------|-------------|
-| **User ↔ Dni** | 1 : 1 | Un usuario tiene un solo DNI |
-| **User ↔ Product** | N : M | Un usuario puede comprar varios productos |
-| **Product ↔ Category** | N : 1 | Un producto pertenece a una categoría |
-
----
-
-## 🧭 Diagrama Entidad–Relación (ER)
-
-```text
-┌────────────┐       1 ──── 1       ┌────────────┐
-│   User     │──────────────────────│    Dni     │
-│ user_id    │                      │ dni_id     │
-│ username   │                      │ number     │
-│ email      │                      │ user_id FK │
-└────────────┘                      └────────────┘
-      │
-      │ N
-      │
-      │ M
-┌────────────┐       N ──── 1       ┌────────────┐
-│  Product   │──────────────────────│  Category  │
-│ producto_id│                      │ category_id│
-│ name       │                      │ name       │
-│ price      │                      │            │
-└────────────┘                      └────────────┘
-```
-
----
-
-## 🧪 Endpoints de la API
-
-### 📦 **ProductController**
-Ruta base: `/api/v1/products`
-
-| Método | Endpoint | Descripción |
-|--------|-----------|-------------|
-| `GET` | `/api/v1/products` | Obtiene todos los productos |
-| `GET` | `/api/v1/products/{id}` | Obtiene un producto por ID |
-| `POST` | `/api/v1/products` | Crea un nuevo producto |
-| `PUT` | `/api/v1/products/{id}` | Edita un producto existente |
-| `DELETE` | `/api/v1/products/{id}` | Elimina un producto por ID |
-
-Ejemplo de respuesta JSON:
+Ejemplo de respuesta:
 ```json
-{
-    "id": 3,
-    "name": "Reloj Apple Watch Series 9",
-    "description": "Smartwatch con monitor de salud y GPS",
-    "price": 449.0,
-    "imageUrl": "https://example.com/images/watch1.jpg",
-    "category": {
-      "categoryId": 1,
-      "categoryName": "Electrónica"
-    }
+[
+  {
+    "projectId": 1,
+    "projectName": "Portfolio Web",
+    "description": "...",
+    "status": { "statusId": 1, "statusName": "Completed" },
+    "developers": [
+      { "devId": 4, "devName": "Laura", "devSurname": "Méndez" }
+    ],
+    "technologies": [
+      { "techId": 2, "techName": "React" }
+    ]
   }
+]
+```
+
+### ✔ GET — Buscar proyectos por palabra
+GET /api/v1/projects/{word}
+
+Busca proyectos cuyo nombre contenga la palabra indicada, sin importar mayúsculas/minúsculas.
+
+### ✔ POST — Crear proyecto
+POST /api/v1/projects
+
+### ✔ PUT — Editar proyecto
+PUT /api/v1/projects/{id}
+
+### ✔ DELETE — Eliminar proyecto
+DELETE /api/v1/projects/{id}
+
+--- 
+
+## 🧩 2. DEVELOPERS
+### ✔ GET — Obtener todos
+GET /api/v1/developers
+
+### ✔ POST — Insertar programador
+POST /api/v1/developers
+
+### ✔ PUT — Editar programador
+PUT /api/v1/developers/{id}
+
+### ✔ DELETE — Borrar programador
+DELETE /api/v1/developers/{id}
+
+---
+
+## 🧩 3. TECHNOLOGIES
+### ✔ GET — Obtener todas las tecnologías
+GET /api/v1/technologies
+
+### ✔ POST — Insertar tecnología
+POST /api/v1/technologies
+
+### ✔ PUT — Editar tecnología
+PUT /api/v1/technologies/{id}
+
+### ✔ DELETE — Borrar tecnología
+DELETE /api/v1/technologies/{id}
+
+---
+
+## 🧩 4. STATUS
+### ✔ GET — Obtener todos los estados
+GET /api/v1/status
+
+---
+
+## 🧠 Arquitectura
+### ✔ Controladores
+
+Gestionan las peticiones HTTP y devuelven ResponseEntity con códigos apropiados.
+
+### ✔ Servicios
+
+Implementan la lógica de negocio sin tocar directamente la base de datos.
+
+### ✔ Repositorios
+
+Gestionan la comunicación con la base de datos usando JPA.
+
+## ⚙️ Configuración
+
+En application.yml:
+
+```yml
+spring:
+  application:
+    name: Producto
+  profiles:
+    active: local
+  datasource:
+    url: jdbc:mysql://localhost:3306/ProyectosDb?createDatabaseIfNotExist=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
 ```
 
 ---
 
-## 🧰 Ejecución del Proyecto
+## ▶️ Ejecución del servidor
 
-1. Clona el repositorio:
-   ```bash
-   git clone https://github.com/tuusuario/springboot-apuntes.git
-   ```
-2. Configura la base de datos en `application.properties`
-3. Ejecuta el proyecto:
-   ```bash
-   mvn spring-boot:run
-   ```
-4. Accede a la API en:
-   ```bash
-   http://localhost:8080/api/v1/products
-   ```
-
+Desde consola:
+```bash
+mvn spring-boot:run
+```
 ---
 
-## 🎯 Objetivo del Proyecto
+## 🎨 Documentos gráficos incluidos
 
-Este repositorio sirve como **apunte práctico** de cómo implementar:
-- Arquitectura **MVC** en Spring Boot  
-- Capa de persistencia con **JPA y Hibernate**
-- **Relaciones entre entidades** (1:1, 1:N, N:M)
+![alt text](image.png)
 
+--- 
+## 🎉 Estado del proyecto
 
----
+✔ Todos los endpoints obligatorios implementados
+✔ Arquitectura MVC/CSR correcta
+✔ Respuestas con ResponseEntity
+✔ Documentación completa
+✔ Relaciones integradas
 
-## 🧾 Autor : Rafael Mancina Castro
- 
-© 2025 - Desarrollado por Rafael Mancina Castro
+--- 
+
+## 🧾 Autor : Francisco Munzón Medina
+© 2025 - Desarrollado por Francisco Munzón Medina
