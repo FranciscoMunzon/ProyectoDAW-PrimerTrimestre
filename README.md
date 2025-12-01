@@ -77,6 +77,8 @@ Project n --- n Technologies
 /api/v1
 ```
 
+---
+
 ## 📌 Endpoints implementados (OBLIGATORIOS)
 
 A continuación se describen todos los endpoints que la API soporta.
@@ -171,6 +173,8 @@ Implementan la lógica de negocio sin tocar directamente la base de datos.
 
 Gestionan la comunicación con la base de datos usando JPA.
 
+--- 
+
 ## ⚙️ Configuración
 
 En application.yml:
@@ -208,11 +212,11 @@ mvn spring-boot:run
 --- 
 ## 🎉 Estado del proyecto
 
-✔ Todos los endpoints obligatorios implementados
-✔ Arquitectura MVC/CSR correcta
-✔ Respuestas con ResponseEntity
-✔ Documentación completa
-✔ Relaciones integradas
+- ✔ Todos los endpoints obligatorios implementados
+- ✔ Arquitectura MVC/CSR correcta
+- ✔ Respuestas con ResponseEntity
+- ✔ Documentación completa
+- ✔ Relaciones integradas
 
 --- 
 
