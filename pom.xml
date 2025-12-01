@@ -10,10 +10,10 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
-	<artifactId>Tienda</artifactId>
+	<artifactId>Proyectos</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Tienda</name>
-	<description>Tienda</description>
+	<name>Proyectos</name>
+	<description>Proyectos</description>
 	<url />
 	<licenses>
 		<license />
@@ -67,7 +67,13 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
+	
+   <dependency>
+     <groupId>org.scala-lang</groupId>
+     <artifactId>scala-library</artifactId>
+     <version>2.13.0</version>
+   </dependency>
+ </dependencies>
 
 	<build>
 		<plugins>

@@ -1,44 +1,71 @@
-INSERT INTO `tiendadb`.`categorias` (category_id, category_name) VALUES
-(1, 'Electrónica'),
-(2, 'Ropa'),
-(3, 'Hogar');
+USE Proyectosdb;
 
-
-INSERT INTO tiendadb.productos (producto_id, product_name, description, price, image_url,category_id) VALUES
-(0, 'Laptop Dell XPS 13', 'Laptop ultraligera con procesador Intel i7', 1200.00, 'https://example.com/images/laptop1.jpg',1);
-
-INSERT INTO tiendadb.productos (producto_id, product_name, description, price, image_url,category_id) VALUES
-(0, 'Smartphone Samsung Galaxy S23', 'Teléfono inteligente con cámara de 108MP', 999.99, 'https://example.com/images/smartphone1.jpg',1);
-
-INSERT INTO tiendadb.productos (producto_id, product_name, description, price, image_url,category_id) VALUES
-(0, 'Auriculares Sony WH-1000XM4', 'Auriculares inalámbricos con cancelación de ruido', 350.50, 'https://example.com/images/headphones1.jpg',1);
-
-INSERT INTO tiendadb.productos (producto_id, product_name, description, price, image_url,category_id) VALUES
-(0, 'Reloj Apple Watch Series 9', 'Smartwatch con monitor de salud y GPS', 449.00, 'https://example.com/images/watch1.jpg',1);
-
-INSERT INTO tiendadb.productos (producto_id, product_name, description, price, image_url,category_id) VALUES
-(0, 'Tablet iPad Pro', 'Tablet con pantalla Liquid Retina y chip M2', 1100.00, 'https://example.com/images/tablet1.jpg',1);
-
-INSERT INTO tiendadb.users VALUES (0, "admin", "holaholita", "admin@localhost.com");
-
-INSERT INTO tiendadb.users VALUES (0, "Rafa", "holaholita1", "rafael@mancina.com");
-
-INSERT INTO tiendadb.users VALUES (0, "Sergi", "holaholita2", "sergi@sergi.com");   
-
-
-
-INSERT INTO tiendadb.users_bought_productos (Users_user_id, productos_producto_id)
+-- -----------------------------------------------------
+-- Tabla: status
+-- -----------------------------------------------------
+INSERT INTO status (status_name)
 VALUES 
-(2, 3),  -- Rafa compró Smartphone Samsung Galaxy S23
-(2, 4);  -- Rafa compró Tablet iPad Pro
+('En desarrollo'),
+('Completado'),
+('En mantenimiento');
 
--- Sergi compra auriculares y smartwatch
-INSERT INTO tiendadb.users_bought_productos (Users_user_id, productos_producto_id)
-VALUES 
-(3, 3) ; -- Sergi compró Auriculares Sony WH-1000XM4
+-- -----------------------------------------------------
+-- Tabla: technologies
+-- -----------------------------------------------------
+INSERT INTO technologies (tech_name)
+VALUES
+('Python'),
+('JavaScript'),
+('React'),
+('Node.js'),
+('MySQL'),
+('Docker');
 
-INSERT INTO dnis (number, front_img, back_img, Users_user_id)
-VALUES 
-('12345678A', 'https://example.com/dni/admin_front.jpg', 'https://example.com/dni/admin_back.jpg', 1),
-('98765432B', 'https://example.com/dni/rafa_front.jpg', 'https://example.com/dni/rafa_back.jpg', 2),
-('45678912C', 'https://example.com/dni/sergi_front.jpg', 'https://example.com/dni/sergi_back.jpg', 3);
+-- -----------------------------------------------------
+-- Tabla: developers
+-- -----------------------------------------------------
+INSERT INTO developers (devname, dev_surname, email, linkedin_url, github_url)
+VALUES
+('Ana', 'García López', 'ana.garcia@example.com', 'https://www.linkedin.com/in/anagarcia', 'https://github.com/anagarcia'),
+('Luis', 'Martínez Pérez', 'luis.martinez@example.com', 'https://www.linkedin.com/in/luismartinez', 'https://github.com/luismartinez'),
+('María', 'Torres Díaz', 'maria.torres@example.com', 'https://www.linkedin.com/in/mariatorres', 'https://github.com/mariatorres'),
+('Carlos', 'Ramírez Soto', 'carlos.ramirez@example.com', 'https://www.linkedin.com/in/carlosramirez', 'https://github.com/carlosramirez');
+
+-- -----------------------------------------------------
+-- Tabla: projects
+-- -----------------------------------------------------
+INSERT INTO projects (project_name, description, start_date, end_date, demo_url, picture, status_status_id)
+VALUES
+('Gestor de Tareas', 'Aplicación web para gestión de tareas personales', '2024-01-10', '2024-03-15', 'https://demo-tareas.example.com', 'tareas.png', 2),
+('E-Commerce API', 'API REST para una tienda en línea', '2024-02-01', '2024-04-20', 'https://demo-ecommerce.example.com', 'ecommerce.png', 2),
+('Sistema de Reservas', 'Plataforma para gestión de reservas de hoteles', '2024-03-05', '2024-07-10', 'https://reservas.example.com', 'reservas.png', 1),
+('Dashboard Financiero', 'Dashboard para visualización de métricas financieras', '2024-05-15', '2024-08-30', 'https://finanzas.example.com', 'dashboard.png', 3);
+
+-- -----------------------------------------------------
+-- Tabla: technologies_used_in_projects
+-- -----------------------------------------------------
+INSERT INTO technologies_used_in_projects (tecnologia_tecnologia_id, projects_project_id)
+VALUES
+(1, 1), -- Python -> Gestor de Tareas
+(5, 1), -- MySQL -> Gestor de Tareas
+(2, 2), -- JavaScript -> E-Commerce API
+(4, 2), -- Node.js -> E-Commerce API
+(5, 2), -- MySQL -> E-Commerce API
+(3, 3), -- React -> Sistema de Reservas
+(4, 3), -- Node.js -> Sistema de Reservas
+(6, 3), -- Docker -> Sistema de Reservas
+(1, 4), -- Python -> Dashboard Financiero
+(3, 4), -- React -> Dashboard Financiero
+(6, 4); -- Docker -> Dashboard Financiero
+
+-- -----------------------------------------------------
+-- Tabla: developers_worked_on_projects
+-- -----------------------------------------------------
+INSERT INTO developers_worked_on_projects (developer_dev_id, projects_project_id)
+VALUES
+(1, 1), -- Ana -> Gestor de Tareas
+(2, 2), -- Luis -> E-Commerce API
+(3, 3), -- María -> Sistema de Reservas
+(4, 4), -- Carlos -> Dashboard Financiero
+(1, 3), -- Ana -> Sistema de Reservas
+(2, 4); -- Luis -> Dashboard Financiero
