@@ -9,17 +9,17 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
+@RestController                                          // Controlador REST
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/status")
-@CrossOrigin(origins = "*")
+@RequestMapping("/api/v1/status")                        // Base de la API para status
+@CrossOrigin(origins = "*")                              // Permite peticiones desde cualquier origen (CORS)
 public class StatusController {
 
     private final StatusService statusService;
 
-    @GetMapping
+    @GetMapping                                          // GET -> Obtener todos los estados
     public ResponseEntity<List<Status>> getAll() {
         List<Status> statusList = statusService.getAllStatus();
-        return ResponseEntity.ok(statusList);
+        return ResponseEntity.ok(statusList);            // 200 OK con la lista de estados
     }
 }

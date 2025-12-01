@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.Proyectos.persistance.model.Technologies;
 
+// Interfaz que define las operaciones relacionadas con las tecnologías.
 public interface TechnologiesService {
     List<Technologies> findAll();                       // GET /technologies
     Technologies createTechnology(Technologies tech);   // POST /technologies

@@ -14,21 +14,21 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data   
-@NoArgsConstructor 
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name = "status")
 public class Status {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "status_id", nullable = false, unique = true)
+    @Column(name = "status_id", nullable = false, unique = true) // Clave primaria
     Integer statusId;
 
-    @Column(name = "status_name", nullable = false, unique = true, length = 45)
+    @Column(name = "status_name", nullable = false, unique = true, length = 45) // Nombre del estado
     String statusName;
 
-    
-    @OneToMany(mappedBy = "status")
-    @JsonIgnore
+    @OneToMany(mappedBy = "status") // Un estado puede tener muchos proyectos
+    @JsonIgnore // Ignorar al serializar para evitar ciclos infinitos
     private List<Project> projects;
 }

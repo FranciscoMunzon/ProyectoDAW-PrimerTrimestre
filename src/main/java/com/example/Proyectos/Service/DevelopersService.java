@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.example.Proyectos.persistance.model.Developers;
 
+// Interfaz que define las operaciones relacionadas con los desarrolladores.
 public interface DevelopersService {
     List<Developers> findAll();                             // GET /developers
     Developers createDeveloper(Developers dev);             // POST /developers

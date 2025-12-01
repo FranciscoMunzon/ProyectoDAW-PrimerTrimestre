@@ -14,21 +14,21 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data   
-@NoArgsConstructor 
+@Data
+@NoArgsConstructor
 @Entity
 @Table(name = "technologies")
 public class Technologies {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "tech_id", nullable = false, unique = true)
+    @Column(name = "tech_id", nullable = false, unique = true) // Clave primaria
     Integer techId;
 
-    @Column(name = "tech_name", nullable = false, unique = true, length = 45)
+    @Column(name = "tech_name", nullable = false, unique = true, length = 45) // Nombre de la tecnología
     String techName;
-  
 
-    @ManyToMany(mappedBy = "technologies")
-    @JsonIgnore
+    @ManyToMany(mappedBy = "technologies") // Relación inversa con Project
+    @JsonIgnore // Ignorar al serializar para evitar ciclos
     private List<Project> projects;
 }
