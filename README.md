@@ -213,7 +213,6 @@ mvn spring-boot:run
 ## 🎉 Estado del proyecto
 
 - ✔ Todos los endpoints obligatorios implementados
-- ✔ Arquitectura MVC/CSR correcta
 - ✔ Respuestas con ResponseEntity
 - ✔ Documentación completa
 - ✔ Relaciones integradas
