@@ -27,7 +27,6 @@ CREATE TABLE IF NOT EXISTS `Proyectosdb`.`status` (
   `status_name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`status_id`))
 ENGINE = InnoDB
-AUTO_INCREMENT
 DEFAULT CHARACTER SET = utf8mb3;
 
 SHOW WARNINGS;
